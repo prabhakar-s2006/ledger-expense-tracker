@@ -1,0 +1,474 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Expense Tracker</title>
+    <meta
+      name="description"
+      content="Personal Expense Ledger and daily expense tracker with user accounts and Express.js backend."
+    />
+    <meta property="og:title" content="Expense Tracker" />
+    <meta
+      property="og:description"
+      content="Personal Expense Ledger and daily expense tracker with user accounts and Express.js backend."
+    />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <!-- Authentication View (Login & Create Account) -->
+    <div id="auth-view" class="page-wrapper">
+      <header class="topbar">
+        <div class="topbar-inner">
+          <span class="brand-wordmark">Expense Tracker</span>
+          <nav class="topnav" aria-label="Authentication navigation">
+            <button type="button" class="topnav-btn is-active" data-auth-nav="login">
+              Sign In
+            </button>
+            <button type="button" class="topnav-btn" data-auth-nav="register">
+              Create Account
+            </button>
+          </nav>
+          <div class="topbar-right">
+            <button type="button" id="auth-header-cta" class="btn-primary">
+              Create Account
+            </button>
+          </div>
+        </div>
+      </header>
+
+      <main class="auth-main">
+        <section class="auth-card" aria-labelledby="auth-heading">
+          <div class="auth-card-top">
+            <h1 id="auth-heading" class="auth-title">Welcome to Personal Expense Ledger</h1>
+            <p class="auth-subtitle">
+              Sign in with your credentials or create a new personal account to manage your monthly expenses in ₹.
+            </p>
+          </div>
+
+          <div class="auth-tabs" role="tablist" aria-label="Authentication mode">
+            <button
+              type="button"
+              role="tab"
+              aria-selected="true"
+              id="tab-login"
+              class="tab-btn is-active"
+              data-auth-tab="login"
+            >
+              Sign In
+            </button>
+            <button
+              type="button"
+              role="tab"
+              aria-selected="false"
+              id="tab-register"
+              class="tab-btn"
+              data-auth-tab="register"
+            >
+              Create Account
+            </button>
+          </div>
+
+          <!-- Login Form -->
+          <form id="login-form" class="entry-form" novalidate>
+            <div class="field-group">
+              <label for="login-email">Email Address</label>
+              <input
+                type="email"
+                id="login-email"
+                name="email"
+                autocomplete="email"
+                placeholder="e.g. priya@example.in"
+                required
+              />
+            </div>
+
+            <div class="field-group">
+              <label for="login-password">Password</label>
+              <input
+                type="password"
+                id="login-password"
+                name="password"
+                autocomplete="current-password"
+                placeholder="Enter your password"
+                required
+              />
+            </div>
+
+            <p id="login-error" class="form-error" role="alert" hidden></p>
+
+            <button type="submit" id="login-submit-btn" class="btn-primary btn-full">
+              Sign In to Expense Tracker
+            </button>
+
+            <p class="auth-switch-hint">
+              New here?
+              <button type="button" class="link-inline-btn" id="switch-to-register">
+                Create a free account
+              </button>
+            </p>
+          </form>
+
+          <!-- Create Account Form -->
+          <form id="register-form" class="entry-form" novalidate hidden>
+            <div class="field-group">
+              <label for="reg-name">Full Name</label>
+              <input
+                type="text"
+                id="reg-name"
+                name="name"
+                autocomplete="name"
+                placeholder="e.g. Priya Sharma"
+                required
+              />
+            </div>
+
+            <div class="field-group">
+              <label for="reg-email">Email Address</label>
+              <input
+                type="email"
+                id="reg-email"
+                name="email"
+                autocomplete="email"
+                placeholder="e.g. priya@example.in"
+                required
+              />
+            </div>
+
+            <div class="field-group">
+              <label for="reg-budget">Monthly Budget (₹)</label>
+              <input
+                type="number"
+                id="reg-budget"
+                name="monthlyBudget"
+                min="1"
+                step="100"
+                value="45000"
+                class="tabular-nums"
+                required
+              />
+            </div>
+
+            <div class="field-row">
+              <div class="field-group">
+                <label for="reg-password">Password</label>
+                <input
+                  type="password"
+                  id="reg-password"
+                  name="password"
+                  autocomplete="new-password"
+                  placeholder="Min 6 characters"
+                  required
+                />
+              </div>
+              <div class="field-group">
+                <label for="reg-confirm">Confirm Password</label>
+                <input
+                  type="password"
+                  id="reg-confirm"
+                  name="confirmPassword"
+                  autocomplete="new-password"
+                  placeholder="Re-enter password"
+                  required
+                />
+              </div>
+            </div>
+
+            <p id="register-error" class="form-error" role="alert" hidden></p>
+
+            <button type="submit" id="register-submit-btn" class="btn-primary btn-full">
+              Create Account
+            </button>
+
+            <p class="auth-switch-hint">
+              Already have an account?
+              <button type="button" class="link-inline-btn" id="switch-to-login">
+                Sign in instead
+              </button>
+            </p>
+          </form>
+        </section>
+      </main>
+
+      <footer class="simple-footer">
+        <div class="footer-inner">
+          <span>Expense Tracker · Personal Expense Ledger</span>
+          <span class="footer-note">Express.js Session Backend (In-Memory Store)</span>
+        </div>
+      </footer>
+    </div>
+
+    <!-- Authenticated User Passbook Dashboard View -->
+    <div id="dashboard-view" class="page-wrapper" hidden>
+      <!-- Simple 3-Zone Top Bar -->
+      <header class="topbar">
+        <div class="topbar-inner">
+          <a href="#summary" class="brand-wordmark">Expense Tracker</a>
+
+          <nav class="topnav" aria-label="Main navigation">
+            <a href="#summary" class="topnav-link is-active">Home</a>
+            <a href="#add-expense" class="topnav-link">Add Entry</a>
+            <a href="#passbook" class="topnav-link">History</a>
+            <a href="#categories" class="topnav-link">Categories</a>
+          </nav>
+
+          <div class="topbar-right">
+            <button type="button" id="logout-btn" class="btn-secondary">
+              Sign Out
+            </button>
+          </div>
+        </div>
+      </header>
+
+      <main class="main-container" id="summary">
+        <!-- Greeting & Month Switcher -->
+        <section class="intro-row">
+          <div class="intro-copy">
+            <h1 class="page-title">Monthly Expense Ledger</h1>
+            <p class="page-subtitle" id="user-greeting-line">
+              Welcome · Indian Rupee (INR)
+            </p>
+          </div>
+
+          <div class="month-tabs" role="group" aria-label="Select month">
+            <button type="button" class="tab-btn" data-month="2026-09">Sep 2026</button>
+            <button type="button" class="tab-btn" data-month="2026-10">Oct 2026</button>
+            <button type="button" class="tab-btn is-active" data-month="2026-11">Nov 2026</button>
+          </div>
+        </section>
+
+        <!-- 3 Simple Summary Cards -->
+        <section class="summary-grid" aria-label="Monthly balance overview">
+          <article class="summary-card">
+            <div class="summary-card-head">
+              <p class="summary-label">Monthly Budget</p>
+              <button type="button" id="edit-budget-btn" class="link-inline-btn">
+                Edit
+              </button>
+            </div>
+            <p id="summary-budget" class="summary-amount tabular-nums">₹0</p>
+            <form id="budget-edit-form" class="budget-inline-form" hidden>
+              <input
+                type="number"
+                id="budget-edit-input"
+                min="1"
+                step="100"
+                class="tabular-nums"
+                aria-label="New monthly budget in rupees"
+              />
+              <button type="submit" class="btn-primary btn-compact">Save</button>
+              <button type="button" id="cancel-budget-btn" class="btn-secondary btn-compact">
+                Cancel
+              </button>
+            </form>
+            <p id="summary-budget-note" class="summary-note">Target limit for this month</p>
+          </article>
+
+          <article class="summary-card">
+            <p class="summary-label">Total Spent</p>
+            <p id="summary-spent" class="summary-amount amount-spent tabular-nums">₹0</p>
+            <p id="summary-spent-note" class="summary-note">0% of monthly budget used</p>
+          </article>
+
+          <article class="summary-card">
+            <p class="summary-label">Balance Remaining</p>
+            <p id="summary-balance" class="summary-amount amount-balance tabular-nums">₹0</p>
+            <p id="summary-balance-note" class="summary-note">Within monthly budget</p>
+          </article>
+        </section>
+
+        <!-- Two-Column Workspace -->
+        <div class="content-grid">
+          <!-- Left Column: Add Expense Form + Category Summary -->
+          <div class="left-col">
+            <section class="card-panel" id="add-expense" aria-labelledby="entry-heading">
+              <div class="card-header">
+                <div>
+                  <h2 id="entry-heading" class="card-title">Add New Expense</h2>
+                  <p class="card-subtitle">Saved directly to your personal ledger</p>
+                </div>
+              </div>
+
+              <form id="expense-form" class="entry-form" novalidate>
+                <div class="field-group">
+                  <label for="expense-title">Expense Title / Shop Name</label>
+                  <input
+                    type="text"
+                    id="expense-title"
+                    name="title"
+                    placeholder="e.g. DMart Groceries or Metro Recharge"
+                    required
+                  />
+                </div>
+
+                <div class="field-row">
+                  <div class="field-group">
+                    <label for="expense-amount">Amount (₹)</label>
+                    <input
+                      type="number"
+                      id="expense-amount"
+                      name="amount"
+                      min="1"
+                      step="1"
+                      placeholder="0"
+                      class="tabular-nums"
+                      required
+                    />
+                  </div>
+
+                  <div class="field-group">
+                    <label for="expense-date">Date</label>
+                    <input
+                      type="date"
+                      id="expense-date"
+                      name="date"
+                      value="2026-11-24"
+                      class="tabular-nums"
+                      required
+                    />
+                  </div>
+                </div>
+
+                <div class="field-row">
+                  <div class="field-group">
+                    <label for="expense-category">Category</label>
+                    <select id="expense-category" name="category">
+                      <option value="Kirana & Groceries">Kirana &amp; Groceries</option>
+                      <option value="House Rent">House Rent</option>
+                      <option value="Food & Chai">Food &amp; Chai</option>
+                      <option value="Electricity & Bills">Electricity &amp; Bills</option>
+                      <option value="Travel & Auto">Travel &amp; Auto</option>
+                      <option value="Mobile & WiFi">Mobile &amp; WiFi</option>
+                      <option value="Medical">Medical</option>
+                      <option value="Shopping">Shopping</option>
+                    </select>
+                  </div>
+
+                  <div class="field-group">
+                    <label for="expense-mode">Payment Mode</label>
+                    <select id="expense-mode" name="mode">
+                      <option value="UPI">UPI (GPay / PhonePe)</option>
+                      <option value="Cash">Cash</option>
+                      <option value="RuPay Card">RuPay / Debit Card</option>
+                      <option value="Bank Transfer">Bank Transfer / NEFT</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="field-group">
+                  <label for="expense-notes">Notes (Optional)</label>
+                  <input
+                    type="text"
+                    id="expense-notes"
+                    name="notes"
+                    placeholder="Optional receipt note"
+                  />
+                </div>
+
+                <p id="expense-form-error" class="form-error" role="alert" hidden></p>
+                <p id="expense-form-success" class="form-notice" role="status" hidden></p>
+
+                <div class="form-buttons">
+                  <button type="submit" id="save-expense-btn" class="btn-primary btn-grow">
+                    Save Expense
+                  </button>
+                  <button type="reset" class="btn-secondary">Clear</button>
+                </div>
+              </form>
+            </section>
+
+            <section class="card-panel" id="categories" aria-labelledby="cat-heading">
+              <div class="card-header">
+                <div>
+                  <h2 id="cat-heading" class="card-title">Spending by Category</h2>
+                  <p class="card-subtitle" id="category-subtitle">Breakdown in ₹</p>
+                </div>
+              </div>
+
+              <ul id="category-list" class="category-list"></ul>
+            </section>
+          </div>
+
+          <!-- Right Column: Passbook History -->
+          <div class="right-col">
+            <section class="card-panel" id="passbook" aria-labelledby="passbook-heading">
+              <div class="card-header passbook-header">
+                <div>
+                  <h2 id="passbook-heading" class="card-title">Recent Expenses</h2>
+                  <p class="card-subtitle" id="passbook-count">Loading entries...</p>
+                </div>
+
+                <div class="passbook-tools">
+                  <div class="search-box">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                      <circle cx="11" cy="11" r="8"></circle>
+                      <path d="m21 21-4.3-4.3"></path>
+                    </svg>
+                    <input
+                      type="search"
+                      id="search-input"
+                      placeholder="Search shop or category"
+                      aria-label="Search shop or category"
+                    />
+                  </div>
+
+                  <div class="mode-tabs" role="group" aria-label="Filter by payment mode">
+                    <button type="button" class="tab-btn is-active" data-mode="all">All</button>
+                    <button type="button" class="tab-btn" data-mode="UPI">UPI</button>
+                    <button type="button" class="tab-btn" data-mode="Cash">Cash</button>
+                    <button type="button" class="tab-btn" data-mode="bank">Bank / Card</button>
+                  </div>
+                </div>
+              </div>
+
+              <div id="passbook-empty-box" class="empty-state" hidden>
+                <p class="empty-title">No expenses recorded for this month yet</p>
+                <p class="empty-copy">
+                  Add your first expense on the left, or load sample expense entries to preview your tracker.
+                </p>
+                <div class="empty-actions">
+                  <button type="button" id="focus-add-btn" class="btn-primary">
+                    Add First Expense
+                  </button>
+                  <button type="button" id="seed-samples-btn" class="btn-secondary">
+                    Load Sample Entries
+                  </button>
+                </div>
+              </div>
+
+              <ul id="passbook-list" class="passbook-list"></ul>
+            </section>
+          </div>
+        </div>
+      </main>
+
+      <footer class="simple-footer">
+        <div class="footer-inner">
+          <div class="footer-profile">
+            <div class="avatar-box" id="avatar-box">
+              <img
+                id="profile-avatar"
+                src="/assets/images/avatar_user_profile_1795507977493.jpg"
+                alt="User profile avatar"
+                referrerpolicy="no-referrer"
+              />
+              <span class="avatar-initials" id="avatar-initials" aria-hidden="true">U</span>
+            </div>
+            <span id="footer-user-label">Personal Expense Ledger</span>
+          </div>
+          <span class="footer-note">Connected to Express.js API (In-Memory Session)</span>
+        </div>
+      </footer>
+    </div>
+
+    <script type="module" src="/app.js"></script>
+  </body>
+</html>

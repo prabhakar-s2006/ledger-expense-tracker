@@ -1,0 +1,6 @@
+{
+  "name": "Ledger — Expense Tracker",
+  "description": "Clean static frontend interface for an expense tracker application built with HTML, CSS, and JavaScript.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
